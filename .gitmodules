@@ -1,5 +1,5 @@
 [submodule "products-microservice"]
-	path = ordering-microservice
+	path = products-microservice
 	url = https://github.com/fysabelah/spring-batch-products.git
 [submodule "cart-microservice"]
 	path = cart-microservice
