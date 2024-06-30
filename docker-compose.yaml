@@ -1,0 +1,173 @@
+services:
+  server-discovery:
+    image: ecommerce-registry:1.0.1
+    build:
+      context: ./ecommerce-registry
+    container_name: server-discovery
+    ports:
+      - 7070:7070
+    restart: unless-stopped
+    networks:
+      - ecommerce-network
+
+  gateway:
+    image: gateway:1.0.0
+    build:
+      context: ./gateway
+    container_name: gateway
+    ports:
+      - 7071:7071
+    restart: unless-stopped
+    networks:
+      - ecommerce-network
+    environment:
+      EUREKA_SERVER: ${EUREKA_SERVER}
+    depends_on:
+      - server-discovery
+
+  rabbitMQ:
+    image: rabbitmq:3.13-management
+    container_name: rabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - 7072:5672
+      - 7073:15672
+    networks:
+      - ecommerce-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    volumes:
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ecommerce:/data/db
+    ports:
+      - 7074:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - cart-network
+
+  # Interface web para o mongo
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-interface
+    restart: unless-stopped
+    ports:
+      - 7075:27018
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: ${MONGODB_PORT}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - cart-network
+#
+#  customer-service:
+#    image: customer-service:1.0.0
+#    build:
+#      context: ./costumers-microservice
+#    container_name: customer-service
+#    ports:
+#      - 7076:7076
+#    restart: unless-stopped
+#    networks:
+#      - ecommerce-network
+#    environment:
+#      PROFILE: ${PROFILE}
+#      DATABASE_USERNAME: ${DATABASE_USERNAME}
+#      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+#      DATABASE_HOST: ${DATABASE_HOST}
+#      DATABASE: customers
+#    depends_on:
+#      - mongodb
+#      - gateway
+#      - server-discovery
+#
+  inventory-service:
+    image: inventory-service:1.0.0
+    build:
+      context: ./spring-batch-products
+    container_name: inventory-service
+    restart: unless-stopped
+    networks:
+      - ecommerce-network
+    environment:
+      PROFILE: ${PROFILE}
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: ${MONGODB_PORT}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+    ports:
+      - 7077:7077
+    depends_on:
+      - mongodb
+      - gateway
+      - server-discovery
+
+  cart-service:
+    image: cart-service:1.0.0
+    build:
+      context: ./cart-service
+    container_name: cart-service
+    restart: unless-stopped
+    networks:
+      - ecommerce-network
+    environment:
+      PROFILE: ${PROFILE}
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: ${MONGODB_PORT}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    depends_on:
+      - mongodb
+      - gateway
+      - server-discovery
+    ports:
+      - 7078:7078
+
+#  payment-service:
+#    image: payment-service:1.0.0
+#    build:
+#      context: ./payment-microservice
+#    container_name: payment-service
+#    restart: unless-stopped
+#    networks:
+#      - ecommerce-network
+#    environment:
+#      PROFILE: ${PROFILE}
+#      POSTGRES_USERNAME: ${DATABASE_USERNAME}
+#      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+#      DATABASE_HOST: ${DATABASE_HOST}
+#      DATABASE: logistics
+#      RABBITMQ_USER: ${RABBITMQ_USER}
+#      RABBITMQ_PASS: ${RABBITMQ_PASS}
+#    depends_on:
+#      - mongodb
+#      - gateway
+#      - server-discovery
+#      - rabbitMQ
+#    ports:
+#      - 7079:7079
+
+networks:
+  ecommerce-network:
+
+volumes:
+  ecommerce:

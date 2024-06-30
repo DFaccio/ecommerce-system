@@ -1,0 +1,12 @@
+[submodule "products-microservice"]
+	path = ordering-microservice
+	url = https://github.com/fysabelah/spring-batch-products.git
+[submodule "cart-microservice"]
+	path = cart-microservice
+	url = https://github.com/DFaccio/cart-service.git
+[submodule "ecommerce-gateway"]
+	path = ecommerce-gateway
+	url = https://github.com/DFaccio/ecommerce-gateway.git
+[submodule "ecommerce-registry"]
+	path = ecommerce-registry
+	url = https://github.com/DFaccio/ecommerce-registry.git
