@@ -10,3 +10,6 @@
 [submodule "ecommerce-registry"]
 	path = ecommerce-registry
 	url = https://github.com/DFaccio/ecommerce-registry.git
+[submodule "payment-microservice"]
+	path = payment-microservice
+	url = https://github.com/erickmatheusribeiro/Payment-Microservice.git
