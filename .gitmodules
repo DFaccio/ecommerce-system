@@ -13,3 +13,6 @@
 [submodule "payment-microservice"]
 	path = payment-microservice
 	url = https://github.com/erickmatheusribeiro/Payment-Microservice.git
+[submodule "authentication-microservice"]
+	path = authentication-microservice
+	url = https://github.com/AydanAmorim/springsecurity.git
