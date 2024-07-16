@@ -16,4 +16,4 @@
 [submodule "ecommerce-user"]
 	path = ecommerce-user
 	url = https://github.com/AydanAmorim/ecommerce-user.git
-	branch = main
+	branch = master
