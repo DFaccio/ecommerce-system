@@ -10,11 +10,9 @@
 [submodule "payment-microservice"]
 	path = payment-microservice
 	url = https://github.com/erickmatheusribeiro/Payment-Microservice.git
-[submodule "spring-batch-products"]
-	path = spring-batch-products
-	url = https://github.com/fysabelah/spring-batch-products.git
-	branch = main
 [submodule "ecommerce-user"]
 	path = ecommerce-user
 	url = https://github.com/AydanAmorim/ecommerce-user.git
-	branch = master
+[submodule "inventory"]
+	path = inventory
+	url = https://github.com/fysabelah/inventory.git
