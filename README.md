@@ -42,8 +42,8 @@ Após os endereços mencionados basta adicionar o path desejado.
 Considerando que a aplicação está sendo executada via container, as documentação podem ser acessadas conforme abaixo.
 
 1. [Autenticação](http://localhost:7071/ecommerce/authentication-api/doc/user.html)
-2. Carrinho
-3. Pagamento
+2. [Carrinho](http://localhost:7071/ecommerce/shopping-cart/doc/cart-service.html)
+3. [Pagamento](http://localhost:7071/ecommerce/payment/doc/payment.html)
 4. [Produto](http://localhost:7071/ecommerce/inventory/doc/products.html)
 
 Caso a aplicação esteja rodando local, o swagger está disponível em http://localhost:
@@ -62,6 +62,10 @@ Caso deseja acessa as interfaces, basta clicar nos links abaixo.
       respectivamente.
 
 ## Como executar
+
+Clone o repositório.
+
+    git clone --recursive https://github.com/DFaccio/ecommerce-system.git
 
 Crie um arquivo .env no diretório principal conforme abaixo.
 
@@ -143,4 +147,14 @@ Exemplo: considerando que irá desenvolver no projeto de produtos, então ficari
 
     http://host.docker.internal:7072
 
-Obs.: _server.port_ é uma chave que pode ser encontrada no application.properties de cada serviço. 
+Obs.: _server.port_ é uma chave que pode ser encontrada no application.properties de cada serviço.
+
+## Funcionamento
+
+1. Crie um usuário, seja ele básico ou administrador. Os métodos podem ser visto no Swagger
+   de [Autenticação](http://localhost:7071/ecommerce/authentication-api/doc/user.html).
+    * No serviços, alguns endpoints só poderão ser acessados com usuário administrador. Caso receba retorno 403,
+      verifique o tipo de usuário.
+    * Por default, a aplicação gera um usuário administrador como usuário _admin_ e senha _123_.
+2. Cadastre produtos. Os métodos podem ser visualizados no Swagger
+   de [Produto](http://localhost:7071/ecommerce/inventory/doc/products.html).

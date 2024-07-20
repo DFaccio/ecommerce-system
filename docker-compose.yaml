@@ -142,6 +142,44 @@ services:
       - server-discovery
       - postgres
 
+  payment-service:
+    image: ecommerce-payment:1.0.0
+    build:
+      context: ./payment-microservice
+    container_name: payment-service
+    expose:
+      - "7074"
+    networks:
+      - ecommerce-network
+    environment:
+      PROFILE: ${PROFILE}
+      DATABASE_HOST: postgres
+      DATABASE: payments
+      DATABASE_USERNAME: ${POSTGRES_DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${POSTGRES_DATABASE_PASSWORD}
+    depends_on:
+      - server-discovery
+      - postgres
+      - gateway
+
+  cart-service:
+    image: ecommerce-cart:1.0.0
+    build:
+      context: ./cart-microservice
+    container_name: cart-service
+    expose:
+      - "7075"
+    networks:
+      - ecommerce-network
+    environment:
+      PROFILE: ${PROFILE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    depends_on:
+      - gateway
+      - mongodb
+      - server-discovery
+
 networks:
   ecommerce-network:
 
