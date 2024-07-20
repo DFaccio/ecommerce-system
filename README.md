@@ -97,9 +97,9 @@ PAYMENT_ADDRESS=lb://payment
 CART_ADDRESS=lb://cart-service
 USER_ADDRESS=lb://ecommerce-user
 
-# Caso o serviço de autenticação esteja rodando local, o valor é localhost:7073. Quando docker, user-service.
+# Caso o serviço de autenticação esteja rodando local, o valor é localhost:7073. Quando docker, user-service:7073.
 # gateway docker e ele local: host.docker.internal:7073
-JWT_SERVER=user-service
+JWT_SERVER=user-service:7073
 
 # API
 PROFILE=prod
@@ -108,6 +108,9 @@ PROFILE=prod
 Após criação do arquivo, execute o comando abaixo:
 
     docker compose up
+
+Acesse http://localhost:7070/ para verificar todos os serviços registrados. Apesar dos demais serviços aparecerem,
+quando em container, apenas o Gateway permitirá requisições.
 
 ### Dúvidas sobre os campos
 
@@ -126,7 +129,7 @@ executadas via gateway.
   que gerou o token JWT. Neste caso as possibilidades são conforme mecionadas no arquivo:
     * ambos local: localhost:7073
     * gateway container e serviço local: host.docker.internal:7073
-    * ambos container: user-service
+    * ambos container: user-service:7073
 
 Os demais campos referem-se a configuração de banco. Para mais informações sobre as chaves utilizadas no Gateway, favor
 visitar o [README.md do projeto](https://github.com/DFaccio/ecommerce-gateway).
