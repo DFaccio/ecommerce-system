@@ -163,24 +163,26 @@ services:
       - postgres
       - gateway
 
-      # Shopping Cart API
-      #cart-service:
-      # image: ecommerce-cart:1.0.0
-      #build:
-      #context: ./cart-microservice
-      #container_name: cart-service
-      #expose:
-      #- "7075"
-      #networks:
-      #- ecommerce-network
-      #environment:
-      # PROFILE: ${PROFILE}
-      #MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      #MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      #depends_on:
-      #- gateway
-      #- mongodb
-      #- server-discovery
+  # API de Carrinho
+  cart-service:
+    image: ecommerce-cart:1.0.0
+    build:
+      context: ./cart-service
+    container_name: cart-service
+    expose:
+      - "7075"
+    restart: unless-stopped
+    networks:
+      - ecommerce-network
+    environment:
+      PROFILE: ${PROFILE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      SWAGGER_SERVER_ADDRESS: http://localhost:7071/ecommerce/shopping-cart
+    depends_on:
+      - gateway
+      - server-discovery
+      - mongodb
 
 networks:
   ecommerce-network:

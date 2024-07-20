@@ -1,6 +1,3 @@
-[submodule "cart-microservice"]
-	path = cart-microservice
-	url = https://github.com/DFaccio/cart-service.git
 [submodule "ecommerce-gateway"]
 	path = ecommerce-gateway
 	url = https://github.com/DFaccio/ecommerce-gateway.git
@@ -16,3 +13,6 @@
 [submodule "inventory"]
 	path = inventory
 	url = https://github.com/fysabelah/inventory.git
+[submodule "cart-service"]
+	path = cart-service
+	url = https://github.com/DFaccio/cart-service.git
