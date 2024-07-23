@@ -185,6 +185,7 @@ services:
       - gateway
       - server-discovery
       - mongodb
+      - inventory-service
 
 networks:
   ecommerce-network:
